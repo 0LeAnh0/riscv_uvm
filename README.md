@@ -3,18 +3,29 @@
 ## Overview
 This repository contains an industry-standard, modular Universal Verification Methodology (UVM) environment for a 32-bit RISC-V core. The monolithic top-level testbench has been successfully refactored into a scalable **VBlock-based architecture** where each critical component of the DUT is independently verified.
 
-## 1. Verified Blocks (VBlocks)
-We have encapsulated the verification components (Agent, Monitor, Scoreboard, TLM) into dedicated VBlock environments. The following blocks are currently verified:
+## 1. Verified Blocks (VBlocks) & Interfaces
+We have encapsulated the verification components (Agent, Monitor, Scoreboard, TLM) into dedicated VBlock environments. The following blocks and interfaces are currently verified:
 
-*   **ALU (Arithmetic Logic Unit)**: Verified core arithmetic operations (ADD, SUB, SLL, SRL, SRA, XOR, OR, AND, SLT) and their respective Flags. The ALU Scoreboard calculates expected results based on intercepted `A_in` and `B_in` direct signals to avoid Mux-induced false negatives.
-*   **Register File**: Verified synchronous writes and asynchronous reads across 32 registers. Checks ensure that `x0` remains hardwired to 0. *(Fixed a DUT bug where `x31` was uninitialized leading to 'X' propagation).*
-*   **Data Memory (Mem)**: Verified load and store operations (LW, SW, LB, SB, etc.). The memory scoreboard maintains a shadow associative array to ensure data integrity.
-*   **Branch Comparator (Branch)**: Monitored the branching conditions (`BrEq`, `BrLT`) against expected operations to ensure control flow logic is sound. *(Fixed a latch inference bug in the DUT's BranchComp module that caused previous branch results to stick).*
-*   **Control Path**: Monitors instruction decodes to verify the correct control signals (`RegWrite`, `MemRead`, `MemWrite`, `ALUSel`, etc.) are generated for each Opcode.
+*   **ALU (Arithmetic Logic Unit)**: Verified 32-bit operations including Addition, Subtraction, Bitwise Logic (AND/OR/XOR), Shifts (Logical/Arithmetic), and Set-Less-Than. 
+    *   *Monitored Interfaces*: `alu_in_a`, `alu_in_b`, `alu_sel`, `alu_out`.
+*   **Register File**: Verified 32x32-bit synchronous write operations on the rising `clk` edge and asynchronous read operations. Checks ensure that `x0` remains hardwired to 0. 
+    *   *Monitored Interfaces*: `clk`, `RegWrite`, `rs1`, `rs2`, `rd`, `wb_data`, `rs1_data`, `rs2_data`.
+*   **Data Memory (Mem)**: Verified Byte, Half-word, and Word Load/Store interactions against a shadow associative array to ensure data retention integrity.
+    *   *Monitored Interfaces*: `clk`, `mem_read`, `mem_write`, ALU calculated `addr`, `wdata`, `mem_rdata`.
+*   **Branch Comparator (Branch)**: Verified unsigned/signed comparisons without ALU dependency to ensure control flow logic is sound.
+    *   *Monitored Interfaces*: `rs1_data`, `rs2_data`, `BrEq`, `BrLT`.
+*   **Control Path**: Monitors the main instruction decoder parsing the Opcode to verify the exact generation of all 10 control signals.
+    *   *Monitored Interfaces*: `instr[6:0]`, `RegWrite`, `MemRead`, `MemWrite`, `ALUSel`, `PCSel`, etc.
 
 ## 2. Testcases Executed
-*   `risc_v_demo_test`: A basic sanity test running a short sequence of instructions.
-*   `risc_v_full_program_test`: A comprehensive system-level test running an extensive assembly program loaded into the Instruction Memory. It tests complex interactions like Data Dependencies, Control Flow jumps, and varying Load/Store accesses.
+*   **`risc_v_full_program_test` (Comprehensive System Validation)**: This monolithic test executes a full assembly program (`program.hex`) verifying specific architectural functions:
+    *   **Instruction Fetch & PC Logic**: Validates `PC` increment by 4 on `clk` rising edge and `rst` clearing `PC` to `0x00000000`. Verifies `instruction_memory` ROM fetching via `PC` addressing.
+    *   **I-Type & R-Type Data Paths**: Tests ADDI, SRA, and LUI operations, explicitly validating the Immediate Generator (`ImmGen`) sign-extension logic through the multiplexers into the ALU and back to the Register File.
+    *   **Load/Store Protocol**: Verifies `SW` and `LW` memory protocol adherence, checking that data written to `Data Memory` is identically fetched in subsequent clock cycles.
+    *   **Control Flow Multiplexing**: Tests `BGE` and `BLTU` execution to verify `PC` multiplexing between `PC+4` and `PC_Branch` based on Branch Comparator outputs.
+
+*   **`risc_v_random_reset_test` (Negative & Interface Testing)**:
+    *   **Asynchronous Reset Recovery**: Exercises the `clk_rst_if` interface by randomly asserting `rst` = 1. Verifies that all sequential elements (PC, Pipeline registers) instantly reset and the processor gracefully resumes instruction fetch from `0x00000000` without latching 'X' states.
 
 ## 3. Key Technical Implementations
 *   **Hierarchical Binding & Signal Interception**: Instead of modifying the DUT RTL, we utilized `assign` bindings in `risc_v_top.sv` to pull internal signals (e.g., `dut0.risc_v_instance.ex_unit.ALU_1.A_in`) out to the Virtual Interface (`risc_v_if`). This allows high-fidelity white-box testing of individual sub-modules.
