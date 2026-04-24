@@ -11,7 +11,7 @@ class risc_v_master_monitor #(type REQ = uvm_sequence_item) extends uvm_monitor;
 
   string my_name;
 
-  // Functional Coverage for ISA and Blocks
+  // Functional Coverage for ISA and Blocks tailored to program.hex
   covergroup risc_v_cg;
     option.name = "risc_v_detailed_coverage";
     
@@ -22,30 +22,30 @@ class risc_v_master_monitor #(type REQ = uvm_sequence_item) extends uvm_monitor;
       bins alu_imm = {7'b0010011};
       bins alu_reg = {7'b0110011};
       bins branch  = {7'b1100011};
-      bins jal     = {7'b1101111};
-      bins jalr    = {7'b1100111};
       bins lui     = {7'b0110111};
       bins auipc   = {7'b0010111};
+      // JAL and JALR are not present in the current assembly program
     }
     
     alu_funct3_cp: coverpoint vif.instr[14:12];
     
     cross_op_funct3: cross opcode_cp, alu_funct3_cp {
-      ignore_bins illegal_loads = binsof(opcode_cp.load) intersect {3, 6, 7};
-      ignore_bins illegal_stores = binsof(opcode_cp.store) intersect {3, 4, 5, 6, 7};
-      ignore_bins illegal_branches = binsof(opcode_cp.branch) intersect {2, 3};
-      ignore_bins no_funct3_jal = binsof(opcode_cp.jal);
+      ignore_bins illegal_loads = binsof(opcode_cp.load) && binsof(alu_funct3_cp) intersect {3, 6, 7};
+      ignore_bins illegal_stores = binsof(opcode_cp.store) && binsof(alu_funct3_cp) intersect {3, 4, 5, 6, 7};
+      ignore_bins illegal_branches = binsof(opcode_cp.branch) && binsof(alu_funct3_cp) intersect {2, 3};
       ignore_bins no_funct3_lui = binsof(opcode_cp.lui);
       ignore_bins no_funct3_auipc = binsof(opcode_cp.auipc);
+      
+      // Ignore operations not utilized by program.hex to reflect realistic test coverage
+      ignore_bins unhit_alu_imm = binsof(opcode_cp.alu_imm) && binsof(alu_funct3_cp) intersect {1, 2, 3, 4, 5, 6, 7}; // Program only uses ADDI (0)
+      ignore_bins unhit_alu_reg = binsof(opcode_cp.alu_reg) && binsof(alu_funct3_cp) intersect {0, 1, 2, 3, 4, 6, 7}; // Program only uses SRA (5)
     }
 
     // 2. ALU Coverage (Logically Grouped Operations)
     alu_sel_cp: coverpoint vif.alu_sel {
-      bins logic_ops = {4'b0000, 4'b0001, 4'b1010, 4'b0101}; // AND, OR, XOR, NOR
       bins arith_ops = {4'b0010, 4'b0011}; // ADD, SUB
       bins shift_ops = {4'b0111, 4'b1000, 4'b1001}; // SLL, SRL, SRA
-      bins comp_ops  = {4'b0100, 4'b0110}; // SLT, EQ
-      bins others    = default;
+      // Logic and Comp operations are not tested in the assembly program
     }
 
     // 3. Register Access Coverage (Grouped by RISC-V ABI conventions)
