@@ -1,0 +1,25 @@
+# Compile Directories
+work/
+sim/work/
+
+# QuestaSim/ModelSim Files
+*.wlf
+*.vstf
+*.ucdb
+transcript
+*.log
+*.bin
+qwave.db
+vsim.wlf
+*.cr.mti
+*.mpf
+modelsim.ini
+
+# Temporary files
+*.swp
+*~
+.DS_Store
+
+# User-specific script logs
+build.log
+check.bat

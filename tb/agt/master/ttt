@@ -1,0 +1,27 @@
+    forever @(posedge vif.clk) begin
+      //
+      // seq_item_port object is part of the uvm_driver class
+      // get_next_item method is part of the interface api between uvm_driver and uvm_sequencer
+      //
+      seq_item_port.get_next_item(req_pkt); // blocking call
+      if (req_pkt == null) begin
+        uvm_report_info(my_name,"No packet available");
+        continue;
+      end
+      uvm_report_info(my_name,"Packet available");
+      if (req_pkt.to_reset == 1)
+      	clk_rst_vif.do_reset(5);
+      else
+	      send_data(req_pkt);
+      
+      //
+      // Send coverage data
+      //
+      cov_port.write(req_pkt);
+      //
+      //
+      rsp_pkt_cnt++;
+      rsp_pkt = RSP::type_id::create($psprintf("rsp_pkt_id_%d",rsp_pkt_cnt));
+      rsp_pkt.set_id_info(req_pkt);
+      rsp_pkt.copy(req_pkt);
+      seq_item_port.item_done(rsp_pkt);

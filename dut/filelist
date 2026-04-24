@@ -1,0 +1,16 @@
+adder.v
+ALU.v
+BranchComp.v
+control_path.v
+data_memory.v
+EX.v
+ID.v
+IF.v
+imm_gen.v
+instruction_memory.v
+mux2_1.v
+mux_4_1.v
+PC.v
+registers.v
+RISCV.v
+test.v

@@ -1,0 +1,107 @@
+COVERGROUP COVERAGE:
+----------------------------------------------------------------------------------------------------
+Covergroup                                             Metric      Goal/ Status                    
+                                                                At Least                           
+----------------------------------------------------------------------------------------------------
+ TYPE /risc_v_master_agent_pkg/risc_v_master_monitor/risc_v_master_monitor__1/isa_cg 
+                                                        66.6%        100 Uncovered                 
+    Coverpoint isa_cg::opcode_cp                        75.0%        100 Uncovered                 
+        covered/total bins:                                 6          8                           
+        missing/total bins:                                 2          8                           
+        bin load                                           40          1 Covered                   
+        bin store                                          20          1 Covered                   
+        bin alu_imm                                       160          1 Covered                   
+        bin alu_reg                                        10          1 Covered                   
+        bin branch                                          5          1 Covered                   
+        bin jal                                             0          1 ZERO                      
+        bin jalr                                            0          1 ZERO                      
+        bin lui                                            35          1 Covered                   
+    Coverpoint isa_cg::alu_funct3_cp                   100.0%        100 Covered                   
+        covered/total bins:                                 8          8                           
+        missing/total bins:                                 0          8                           
+        bin auto['b000]                                   180          5 Covered                   
+        bin auto['b001]                                    15          5 Covered                   
+        bin auto['b010]                                    40          5 Covered                   
+        bin auto['b011]                                     5          5 Covered                   
+        bin auto['b100]                                     5          5 Covered                   
+        bin auto['b101]                                    15          5 Covered                   
+        bin auto['b110]                                    15          5 Covered                   
+        bin auto['b111]                                    10          5 Covered                   
+    Cross isa_cg::cross_op_funct3                       25.0%        100 Uncovered                 
+        covered/total bins:                                16         64                           
+        missing/total bins:                                48         64                           
+        bin <load,auto['b000]>                              5          1 Covered                   
+        bin <load,auto['b010]>                             25          1 Covered                   
+        bin <load,auto['b100]>                              5          1 Covered                   
+        bin <load,auto['b101]>                              5          1 Covered                   
+        bin <store,auto['b000]>                             5          1 Covered                   
+        bin <store,auto['b001]>                             5          1 Covered                   
+        bin <store,auto['b010]>                            10          1 Covered                   
+        bin <alu_imm,auto['b000]>                         160          1 Covered                   
+        bin <alu_reg,auto['b101]>                          10          1 Covered                   
+        bin <branch,auto['b110]>                            5          1 Covered                   
+        bin <lui,auto['b000]>                               5          1 Covered                   
+        bin <lui,auto['b001]>                               5          1 Covered                   
+        bin <lui,auto['b010]>                               5          1 Covered                   
+        bin <lui,auto['b011]>                               5          1 Covered                   
+        bin <lui,auto['b110]>                               5          1 Covered                   
+        bin <lui,auto['b111]>                              10          1 Covered                   
+        bin <alu_reg,auto['b000]>                           0          1 ZERO                      
+        bin <branch,auto['b000]>                            0          1 ZERO                      
+        bin <jal,auto['b000]>                               0          1 ZERO                      
+        bin <jalr,auto['b000]>                              0          1 ZERO                      
+        bin <load,auto['b001]>                              0          1 ZERO                      
+        bin <alu_imm,auto['b001]>                           0          1 ZERO                      
+        bin <alu_reg,auto['b001]>                           0          1 ZERO                      
+        bin <branch,auto['b001]>                            0          1 ZERO                      
+        bin <jal,auto['b001]>                               0          1 ZERO                      
+        bin <jalr,auto['b001]>                              0          1 ZERO                      
+        bin <alu_imm,auto['b010]>                           0          1 ZERO                      
+        bin <alu_reg,auto['b010]>                           0          1 ZERO                      
+        bin <branch,auto['b010]>                            0          1 ZERO                      
+        bin <jal,auto['b010]>                               0          1 ZERO                      
+        bin <jalr,auto['b010]>                              0          1 ZERO                      
+        bin <load,auto['b011]>                              0          1 ZERO                      
+        bin <store,auto['b011]>                             0          1 ZERO                      
+        bin <alu_imm,auto['b011]>                           0          1 ZERO                      
+        bin <alu_reg,auto['b011]>                           0          1 ZERO                      
+        bin <branch,auto['b011]>                            0          1 ZERO                      
+        bin <jal,auto['b011]>                               0          1 ZERO                      
+        bin <jalr,auto['b011]>                              0          1 ZERO                      
+        bin <store,auto['b100]>                             0          1 ZERO                      
+        bin <alu_imm,auto['b100]>                           0          1 ZERO                      
+        bin <alu_reg,auto['b100]>                           0          1 ZERO                      
+        bin <branch,auto['b100]>                            0          1 ZERO                      
+        bin <jal,auto['b100]>                               0          1 ZERO                      
+        bin <jalr,auto['b100]>                              0          1 ZERO                      
+        bin <lui,auto['b100]>                               0          1 ZERO                      
+        bin <store,auto['b101]>                             0          1 ZERO                      
+        bin <alu_imm,auto['b101]>                           0          1 ZERO                      
+        bin <branch,auto['b101]>                            0          1 ZERO                      
+        bin <jal,auto['b101]>                               0          1 ZERO                      
+        bin <jalr,auto['b101]>                              0          1 ZERO                      
+        bin <lui,auto['b101]>                               0          1 ZERO                      
+        bin <load,auto['b110]>                              0          1 ZERO                      
+        bin <store,auto['b110]>                             0          1 ZERO                      
+        bin <alu_imm,auto['b110]>                           0          1 ZERO                      
+        bin <alu_reg,auto['b110]>                           0          1 ZERO                      
+        bin <jal,auto['b110]>                               0          1 ZERO                      
+        bin <jalr,auto['b110]>                              0          1 ZERO                      
+        bin <load,auto['b111]>                              0          1 ZERO                      
+        bin <store,auto['b111]>                             0          1 ZERO                      
+        bin <alu_imm,auto['b111]>                           0          1 ZERO                      
+        bin <alu_reg,auto['b111]>                           0          1 ZERO                      
+        bin <branch,auto['b111]>                            0          1 ZERO                      
+        bin <jal,auto['b111]>                               0          1 ZERO                      
+        bin <jalr,auto['b111]>                              0          1 ZERO                      
+ CLASS risc_v_master_monitor #(class risc_v_tlm)
+
+TOTAL COVERGROUP COVERAGE: 66.6%  COVERGROUP TYPES: 1
+
+ASSERTION RESULTS:
+-------------------------------------------------------
+Name                 File(Line)           Failure Pass 
+                                          Count   Count 
+-------------------------------------------------------
+/top/risc_v_if0/a_pc_aligned
+                     D:/DV_Project/risc_v/inf/risc_v_if.sv(20)       0     -

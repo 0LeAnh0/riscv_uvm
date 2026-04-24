@@ -1,0 +1,16 @@
+$RISC_V_TB_DIR/dut/adder.v
+$RISC_V_TB_DIR/dut/ALU.v
+$RISC_V_TB_DIR/dut/BranchComp.v
+$RISC_V_TB_DIR/dut/control_path.v
+$RISC_V_TB_DIR/dut/data_memory.v
+$RISC_V_TB_DIR/dut/EX.v
+$RISC_V_TB_DIR/dut/ID.v
+$RISC_V_TB_DIR/dut/IF.v
+$RISC_V_TB_DIR/dut/imm_gen.v
+$RISC_V_TB_DIR/dut/instruction_memory.v
+$RISC_V_TB_DIR/dut/mux2_1.v
+$RISC_V_TB_DIR/dut/mux_4_1.v
+$RISC_V_TB_DIR/dut/PC.v
+$RISC_V_TB_DIR/dut/registers.v
+$RISC_V_TB_DIR/dut/RISCV.v
+$RISC_V_TB_DIR/dut/tresemi_wrapper.sv
